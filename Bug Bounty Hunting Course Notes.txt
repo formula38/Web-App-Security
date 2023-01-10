@@ -1,0 +1,282 @@
+Bug Bounty Hunting Course Jot Downs:
+
+- OTW Natas
+- Hacker101 CTF from HackerOne
+- Hack The Box
+- TryHackMe
+
+VW Ware: https://www.vmware.com/products/workstation-player/workstation-player-evaluation.html
+Kali Linux PreBuilt VM: https://www.kali.org/get-kali/#kali-virtual-machines
+
+All About Recon::
+
+$ How to choose my target?
+- HackerOne logged out
+- Check directory by date
+--- larger attack surface
+--- larger diversity of where attackers have already been
+- Find something I'm really familiar with
+- Newest Program
+- Unpaid Program
+- Follow developers
+--- Lookout for github links and announcments 
+--- be the first to know about new attack surfaces
+- Github uses boolean search like google
+- Search /robot.txt and visit disallowed files
+
+
+$ nmap
+- nmap -A -p- -Pn 10.10.10.223 -v : use this for CTF & HTB for scanning
+- nmap -A -F -T1 10.10.10.223 -v : used to scan bug bounty ports. 
+-- the -F scans first 100 ports
+-- the -T is the speed or agression of scanning T1(slow) T5(most instrusive)
+-- the -v will print out open port data as they are found
+- nmap -A -p35, 445, 135, 139,80, 443 10.10.10.215 -v
+--- Choosing specific ports to see if they are open
+
+# SecLists | Daniel Miessler
+- Full suit of web app security tools
+- https://github.com/danielmiessler/SecLists
+- git clone https://github.com/danielmiessler/SecLists.git
+-- Save in opt file
+
+
+$ ffuf/dirb/fuzzers
+- ffuf -w /usr/share/wordlists/drb/common.txt -u http://tenet.htb/FUZZ -fc 403 -p 2
+--- fc: fiters any specific codes I do not wan to see
+--- p: delay in request from 0.1 seconds to 2 seconds
+- ffuf -u https://FUZZ.yahoo.com/ -w /usr/share/wordlists/dirb/common.txt -p 1
+--- u = url
+--- FUZZ = location I want to fuzz (sub.domain in this case)
+--- This will brute force anything comeback with status code "200"
+--- w = wordlist being used as "FUZZ"
+--- p = Speed between attempts in seconds
+- dirb is like ffuf but fuzzes reursively
+---- $ dirb yahoo.com
+
+$ wpscan
+- vulnerability scanner for websites built on wordpress
+- checks all plugins to see if any are out of date
+- check website theme age and see it's had updates
+- wpscan --rul http://tenet.htb --e ap --plugins-detection aggressive
+
+- Check for certificate expiration on sites
+- Key Ports: 22, 80, 443, 1443, 3389
+
+
+https://www.domain.com/blog/artical/search?param=42
+- https:// = scheme
+- www = sub domain
+- domain = the domain
+- .com = top domain level
+- /blog/artical/search = path or location of contents
+- ? = signifies query
+- param=42 = parameter
+
+During recon, save URLs that look interesting to go back and test later like:
+- A url with ...com/some/location?id=xx or ?url=xx
+
+$ dig
+- dig axfr @10.10.10.123 friendszone.red
+- Zone Transfers happen on port 53
+--- dig axfr #10.10.10.123 friendzone.red > zone
+--- dig axfr @10.10.10.123 frinedzoneportial.red >> zone
+--- cat zone | grep frinedzone | grep IN | awk `{print $1}` | sort -u
+
+$nslookup
+- Run if port 53 is open to get some domain zone transfer infomation
+
+$ whois
+- This is like nslookup but much more info for pen testing
+- domain name
+- registry owner
+- info about the domain and company
+
+$ theHarvester
+- Penetration testing recon tool
+- looks for other domains/subs
+- find email addresses to target
+- theHarvester -d domain.com -b google
+
+$ go
+- sudo apt-get install golang
+
+# waybackurls
+- Check if sub.domains will resolve or not
+- https://github.com/tomnomnom/waybackurls
+- go install github.com/tomnomnom/waybackurls@latest
+
+# amass enum -passive -d yahoo.com
+- gives a bunch a sub domains to run waybackurls on
+- Gives very broad spectrum of urls
+- Great for a starting attack surface
+- Make sure domains are in scope (public bounty)
+
+# gedit
+- tool for file creation and editing
+- $ gedit yahoo.txt
+- $ cat yahoo.txt | ./waybackurls > yahoo.urls
+--- saves all sub domains to a file
+- sudo apt-get install gedit
+
+$ httprobe
+- use amass to find all sub domains
+- use waybackurl to see which sites are connected to real domains
+- httprobe automates checking to see if each response resolves or not
+--- this is how I know which ones to target
+--- print results: cat yahoo.urls | httprobe > valid.urls
+
+$ sublist3r
+- tool used to find sub domains of websites
+- sudo apt-get install sublist3r
+
+OpenList
+- Browser extension
+- Enables me to open several URLs at the same time by pasting a list
+- https://addons.mozilla.org/en-US/firefox/addon/openlist/
+
+Wappalyzer
+- finds what tech and languages are being used on a website
+- browser extension tool to analyze the tech used on a specific site
+- w3techs.com/sites does this as well
+- checking the debugger in the browser devops console to find clues
+- https://addons.mozilla.org/en-US/firefox/addon/wappalyzer/
+
+React Developers Tools
+- browser exention tool so see which sites are uses the react framwork
+- means javascript
+- means I know what I'm looking at
+- https://addons.mozilla.org/en-US/firefox/addon/react-devtools/
+
+Burp Suite
+- Use as a proxy for IP address
+- https://portswigger.net/burp
+- Set up a proxy for your local machine only listening 
+--- In browser -> settings -> network settings -> 
+---- Select Manual proxy configuration
+---- HTTP Proxy: 127.0.0.1
+---- port: 8080
+--- Proxy -> Options -> Proxy Listeners
+---- Select local ip (127...)
+---- Import/Export CA cert
+----- Export: Certificate in DER format as caCert.der (org cert. ca)
+----- Save to accesible location
+--- In browser -> settings -> privacy -> certificates -> view certs
+---- import caCert.der (org. cert.ca)
+---- May have to switch to all files to find .ca files
+-- Internet connection on port 8080 should only world for local IP when proxy is running
+
+
+######## URL HACKING ########
+
+- Look for direcories first
+--- use tool like dirb
+--- Look for source code with 'view source code' and 'inspect'
+--- might find hidden files or understand function of code
+- Practice with
+--- Hacker101 CTF
+--- OTW Natas
+
+# OWASP Juice Shop on TryHackMe
+- Web Application vulnirability playground
+- Able to connect through tryhackme: 
+--- https://tryhackme.com/room/owaspjuiceshop
+--- click start machine and x out of pop-up
+--- click Access Machines -> OpenVPN -> download vpn config
+--- Open Terminal in vpnconfig direcotry (usually defaults to downloads)
+------ sudo apt install openvpn
+------ sudo openvpn yourvpnconfig.ovpn (this will run server)
+------ open the IP Address given on TryHackMe in browser
+--- 1 hour time limit and need internet connection
+
+# OWASP Juice Shop on localhost:3000
+- https://sourceforge.net/projects/juice-shop/files/v9.1.3/
+-- Version: juice-shop-9.1.3_node12_linux_x64.tgz
+--- Download and save file
+--- Open terminal in directory
+--- tar -xvzf juic...tab
+-- sudo apt-get install nodejs
+-- sudo apt-get install npm
+--- cd to juice shop folder
+-- npm start
+--- Juice Shop is now listening on localhost:3000
+
+# Intercepting Juice Shop with Burp
+- In brower new tab -> about:config (this is browser configuration)
+- Search: network.proxy
+- network.proxy.allow_hijacking_localhost: false -> true
+
+
+
+######## IDOR (insecure direct object referencing) ########
+
+With IDORs and business logic errors you can: 
+- bypass payment and reerse payment options so that you are the one 
+getting paid and recieving item
+- Skip login pages
+- Access someone else's account
+- Find ways to write on someone else's news feed on social media platforms
+- Leave feedback as someone else
+- Edit another person's post or blog
+
+Best way to test for IDOR and Logic errors:
+- creating two accounts (attacker and victim)
+- Always test against your own personal account
+-- testing on account you don't own is always out of scope
+- When looking for iput information, remember to look for hidden fields
+-- <input type="hiden" name="admin" value="no"
+-- To amake an admin account just need to change value="yes"
+- With a cookie you might see something like userid-372623 and you can
+change this value to 0 to gain admin privleges
+- Change user-id to the user id of a second account you own and see
+what you are able to manipulate on your second account that you are
+not logged into
+- Most of the time, you will be testing for IDORs inside BURP, however
+you may find them in the URL
+- IDORs where you buy something and you see inside the URL
+-- www.website.com/invoice=12
+-- You can try and change the 12 to 11 to get access to another customers's
+invoice and sensitive information
+-- www.webite.com/img-=87
+-- In this case change the image to 86 and see what you can access
+
+- Check out the logout fucntionality
+-- Can lead to infomation disclosure
+-- Even after someone logs out sometimes the previous page will be casched
+and ou can look back at the URL
+-- Possible to open a browser and hit the back button and go to previous page
+
+
+# CyberChef
+- Decoder/Encoder
+- Useful to check cookie id content from burp
+- Use Magic in recipe colum and past cookie id in input section
+
+#  Intruder (Burp)
+- Helps stream like attack tests
+- Right click request and send to instruder
+- Intruder tab -> positions
+-- All highlighted areas are possible param postions
+-- Click clear to clear out selected postions
+-- Look for spots for things like ID
+--- hightlight selected aread and click Add (symbol) button
+- Payload tab will be the data iterating through selected postion
+-- Payload set = 1 (postions)
+-- Payload type = Simple List
+-- Add list items to Payload Options
+-- Click Start Attack
+
+$ Juice Shop IDOR 1
+- TIP: Leaving customer feedback under someone elses user
+
+
+
+
+
+
+
+
+
+
+
+
