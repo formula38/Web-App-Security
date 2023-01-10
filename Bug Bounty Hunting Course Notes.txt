@@ -266,8 +266,11 @@ and ou can look back at the URL
 -- Add list items to Payload Options
 -- Click Start Attack
 
-$ Juice Shop IDOR 1
-- TIP: Leaving customer feedback under someone elses user
+
+
+$ Juice Shop
+- TODO: Get Juice Shop to pay me hundreds of dollars
+- Buy something really expensive for next to nothing
 
 
 
