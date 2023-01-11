@@ -266,6 +266,16 @@ and ou can look back at the URL
 -- Add list items to Payload Options
 -- Click Start Attack
 
+Business logic tip:
+- Check payloads with burp proxy interception
+-- See if attributes can be changed or added
+-- Sending to repeater and trying sem send requests to see what 
+objects are formed
+-- Some objects may hove "role", "quantity", or "price" attributes
+ that can be changed/added etc..
+
+
+
 
 
 $ Juice Shop
