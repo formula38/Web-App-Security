@@ -531,10 +531,12 @@ Accessing a local resource that may not return
 	- Example:
 		- Input field:
 			- <img src onerror="alert('CTF')"/>
-			- <img src onerror="alert('Login')"/>
+			- <img src onerror="prompt('Login')"/>
 			- <img src onerror="alert(document.cookie)"/>
 		- src not being assigned a string throws the error which causes an alert
 			- <img src="skfj" onerror="alert('do something')"/>
+		-alert() will do/display something
+		- prompt will ask for input/need something
 - If there is a search bar.. check there first!
 	- <script>alert(1)</script>
 - I should black list words/chars.. to prevent xss
@@ -571,7 +573,21 @@ Accessing a local resource that may not return
 		- google.com/?search=xss
 		- inspect: google.com/xss in source code script
 
+- Practicing JavaScript
+	- Chrome Developer Tools
+	- Sources -> dowble-arrow -> snippets -> index.js
+
+
+
 ####### API Enumeratioin ########
+
+- Use ffuf and a wordlist to enumerate API endpoints
+	- ffuf -u http://url.here/FUZZ -w /path/to/wordlist.txt
+
+
+
+
+
 ####### SSRF Server Side Scripting ########
 ####### Command Injection ########
 ####### File Upload ########
