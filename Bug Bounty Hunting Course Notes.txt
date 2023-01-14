@@ -583,6 +583,8 @@ Accessing a local resource that may not return
 
 - Use ffuf and a wordlist to enumerate API endpoints
 	- ffuf -u http://url.here/FUZZ -w /path/to/wordlist.txt
+	- ffuf -u http://url.here/or/FUZZ -w /path/to/wordlist.txt
+	- ffuf -u http://url.here/FUZZ/also -w /path/to/wordlist.txt
 
 
 
