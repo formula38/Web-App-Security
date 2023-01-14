@@ -745,8 +745,24 @@ http://webapp.thm/get.php?file=userCV.pdf
 
 ####### Wordpress & CMS ########
 
+$ gobuster
+	- Use to fuzz wordpress sites
+	- Allow for the php extension flag (-x php)
+	- In terminal:
+		- sudo apt-get install gobuster
+		- $ gobuster *IPaddress*
 
-
+-- Tip: If a wp paga has a bunch of past from same author that is 
+	most likely a user
+-- Everything in php
+	- Get comfortable with php reverse shell script
+-- Config files are always juice especilly for db's
+-- about:config -> keyword enabled -> false
+	- This stops auto redirects by browser from URL keywords
+- Checking for Vulnerable WP Plugins
+	- In Terminal
+		- $ wpscan --url http://wordpress.com/page/ --plugins-detections aggressive -a ap
+		- 'aggressive' checks all application plugins not just source code
 
 
 
