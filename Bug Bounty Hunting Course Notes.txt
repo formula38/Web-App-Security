@@ -705,13 +705,45 @@ executed and get back a reverse shell
 ####### LFI & RFL ########
 
 - LFI = Local File Inclusion
+		- Gives the opportunity or ability to read files on the local server
 - RFI = Remote File Inclusion
+		- Gives the ability to host up my own files and then have a server
+		reachout to the server I make on my Kali machine (nc)
+		- Executing this file will lead to remote code execution on the target
+		server
 
+http://webapp.thm/get.php?file=userCV.pdf
+	- Protocol = http://
+	- Domain Name = webapp.thm
+	- File Name = get.php
+	- Query String Begins = ?
+	- Parameter = file
 
+- LFI in URL
+	- Input chars into a search bar
+	- If in the URL you see a search param= 
+		- that is a place to include a file locally
 
 
 
 ####### Cookies & Tokens ########
+
+- Communicating with an API in command line
+	- $ curl -POST http://10.10.10.137:3000 -d 'username=root&password=pass';
+	- When token recieved I can use this as an Authorization header in
+	HTTP request
+		- Authorization: Bearer *token*
+		- Highlighting sections of token in Burp will decode in inspector
+- Three parts of a Token
+	- Header
+	- Payload
+	- Signature (shared key)
+
+- Base64 Decode in Command line
+	- echo -n *token* | base64 -d
+
+
+
 ####### Wordpress & CMS ########
 
 
