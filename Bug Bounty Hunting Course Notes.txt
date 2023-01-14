@@ -587,10 +587,38 @@ Accessing a local resource that may not return
 	- ffuf -u http://url.here/FUZZ/also -w /path/to/wordlist.txt
 
 
+####### SSRF Server Side Request Forgery ########
+
+- Enables unauthorized access to server data
+- How it works
+	- Hacker sends manipulated Url to Website
+	- Website makes Hacker's request to Server
+	- Server responds to Website with data requested
+	- Hacker can access returned data on Website
+
+- The problem with SSRF is the ability to manipulate a URL request mid process
+	- Dead Giveaways:
+		- Input field asking for a file URL
+		- www.website.com/beta.php?url=/
+			- if the query is pointing to root "/" access or any file really
+
+- Way to Check for SSRF in Terminal
+	- Use NetCat listener
+		$ nc -lvnp 80 // port 80
+	- This wil listen to all activity on port 80 (HTTP)
+	- Enter target's URL in search/input field and submit
+		- If Request should hang I can cancel out in terminal
+		- Terminal wil print results
+	- If vulnerable:
+		- Text content of URL page should print on screen
+		- Now able to traverse the URL I targeted
+			- Scan and listen to ports
+
+?? etc/host file ??
 
 
 
-####### SSRF Server Side Scripting ########
+
 ####### Command Injection ########
 ####### File Upload ########
 ####### LFI & RFL ########
