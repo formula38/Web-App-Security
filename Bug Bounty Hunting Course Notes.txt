@@ -766,6 +766,25 @@ $ gobuster
 
 
 
+####### Web Cache Poisoning ########
+
+- Attacking the cached files between client and website
+	- Previous transactions saved between to client and server to lessen load
+	on the website server
+- Cache Buster
+	- If I see 'X Cashe: hit' in intercepted req respone
+		- GET /?cb=test
+		- cb = casche buster
+		- If this works I will see 'X Cache: miss'
+			- When I send the req againi I will get a hit this time
+			- Once the 'Age' or resets the cached data expires
+	- If I can manipulate data and insert at the cache reset time
+	I can have that data stored as if it came from the intended website
+
+- X-Forwarded Host?
+
+
+
 
 $ Juice Shop
 - TODO: 
