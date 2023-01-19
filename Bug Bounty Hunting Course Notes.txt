@@ -857,6 +857,12 @@ $ wifite
 		- $ sudo ip link set wlan0 name wlan0mon
 		- $ sudo ip link set wlan0 up
 
+-- Network Dropouts when Using Adaptor
+	- Check status of network
+		- $ service NetworkManager status
+	- If Active = Inaactive (dead)
+		- $ service NetworkManager restart
+
 
 $ Juice Shop
 - TODO: 
