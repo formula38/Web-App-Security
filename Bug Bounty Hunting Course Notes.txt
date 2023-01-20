@@ -11,6 +11,21 @@ Kali Linux PreBuilt VM: https://www.kali.org/get-kali/#kali-virtual-machines
 
 All About Recon::
 
+# Changing username@hostname (linux) 
+- Change Hostname
+	- $ hostnamectl set-hostname myHostName
+	- Close and then open new terminal to see changes
+- Change Username
+	- usermod -l myUsername -d /home/myUsername -m kali (username to override)
+	- groupmod -n myUsername kali (group to override)
+	- Now I need to change root password to logout and back in
+- Change Root Password
+	- Change to Root user
+		- sudo su -> enter passwrd -> now I'm root of current user
+	- Changing current root user password
+		- $ psswd -> enter new password -> retype -> update successful
+	- Restart kali machine
+
 $ How to choose my target?
 - HackerOne logged out
 - Check directory by date
